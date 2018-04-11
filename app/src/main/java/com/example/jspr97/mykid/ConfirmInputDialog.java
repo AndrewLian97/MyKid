@@ -3,20 +3,13 @@ package com.example.jspr97.mykid;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatDialogFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
-
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import java.lang.reflect.Type;
-import java.util.ArrayList;
 
 public class ConfirmInputDialog extends AppCompatDialogFragment {
 
@@ -79,35 +72,16 @@ public class ConfirmInputDialog extends AppCompatDialogFragment {
                                                                     timeString,
                                                                     reporterString);
 
-                        // add the object into the arraylist and save
-                        ArrayList<KidActivity> arrayList = getArrayList();
-                        arrayList.add(newActivity);
-                        saveArrayList(arrayList);
+                        // insert to database
+                        UserSQL db = new UserSQL(currentActivity);
+                        db.insert(newActivity);
+
+                        // return to main activity
                         currentActivity.setResult(Activity.RESULT_OK, currentActivity.getIntent());
                         currentActivity.finish();
                     }
                 });
 
         return builder.create();
-    }
-
-    private ArrayList<KidActivity> getArrayList() {
-        SharedPreferences prefs = getContext().getSharedPreferences(MainActivity.PREFERENCES, Context.MODE_PRIVATE);
-        Gson gson = new Gson();
-        String json = prefs.getString(MainActivity.KEY, null);
-        Type type = new TypeToken<ArrayList<KidActivity>>() {}.getType();
-        return gson.fromJson(json, type);
-    }
-
-    private void saveArrayList(ArrayList<KidActivity> array){
-        // convert arraylist to json string
-        SharedPreferences prefs = getContext().getSharedPreferences(MainActivity.PREFERENCES, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        Gson gson = new Gson();
-        String json = gson.toJson(array);
-
-        // save
-        editor.putString(MainActivity.KEY, json);
-        editor.apply();
     }
 }
