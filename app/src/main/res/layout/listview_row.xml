@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    android:orientation="vertical"
+    android:paddingBottom="20dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingTop="20dp">
+
+    <TextView
+        android:id="@+id/activitynameID"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:fontFamily="sans-serif"
+        android:text="@string/activity_name"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        android:textColor="?android:attr/textColorPrimary"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/nameofreporterID"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="@string/reporter_name"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textColor="?android:attr/textColorSecondary"
+        android:textStyle="italic" />
+
+</LinearLayout>

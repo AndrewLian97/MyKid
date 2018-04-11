@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">MyKid</string>
+    <string name="new_activity">New Activity</string>
+    <string name="activity_name">Activity Name</string>
+    <string name="location">Location</string>
+    <string name="date">Date of Activity</string>
+    <string name="time">Time</string>
+    <string name="reporter_name">Name of Reporter</string>
+    <string name="empty_error">This field must not be empty</string>
+    <string name="invalid_error">Invalid name</string>
+    <string name="confirm">Confirmation</string>
+</resources>
