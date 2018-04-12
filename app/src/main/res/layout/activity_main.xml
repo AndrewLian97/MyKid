@@ -7,8 +7,8 @@
     android:layout_height="match_parent"
     tools:context="com.example.jspr97.mykid.MainActivity">
 
-    <LinearLayout
-        android:id="@+id/linearLayout"
+    <FrameLayout
+        android:id="@+id/frameLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -31,7 +31,7 @@
             android:textAlignment="center"
             android:visibility="gone" />
 
-    </LinearLayout>
+    </FrameLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/floatingActionButton"
@@ -43,7 +43,7 @@
         android:scaleType="center"
         android:tint="@android:color/white"
         app:fabSize="normal"
-        app:layout_anchor="@id/linearLayout"
+        app:layout_anchor="@id/frameLayout"
         app:layout_anchorGravity="bottom|right|end"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
