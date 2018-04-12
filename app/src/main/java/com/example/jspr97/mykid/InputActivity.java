@@ -50,6 +50,7 @@ public class InputActivity extends AppCompatActivity {
             @Override
             public void onDateSet(DatePicker datePicker, int y, int m, int d) {
                 date.setText(String.format("%02d/%02d/%d", d, m+1, y));
+                date.setError(null);
             }
         };
         time.setOnClickListener(new View.OnClickListener() {
@@ -92,7 +93,8 @@ public class InputActivity extends AppCompatActivity {
         // display date picker popup
         DatePickerDialog dialog = new DatePickerDialog(this,dateSetListener, year, month, day);
         dialog.getDatePicker().setMaxDate(cal.getTimeInMillis());
-        dialog.show();
+        if (!dialog.isShowing())
+            dialog.show();
     }
 
     private void displayTimeDialog() {
@@ -102,30 +104,38 @@ public class InputActivity extends AppCompatActivity {
 
         // display time picker popup
         TimePickerDialog dialog = new TimePickerDialog(this, timeSetListener, hour, min, false);
-        dialog.show();
+        if (!dialog.isShowing())
+            dialog.show();
     }
 
     public void onClickSave(View view) {
+        String activityNameString = activityName.getText().toString().trim();
+        String locationString = (location.getText().length() == 0)? "-" : location.getText().toString().trim();
+        String dateString = date.getText().toString();
+        String timeString = (time.getText().length() == 0)? "-" : time.getText().toString();
+        String reporterString = reporter.getText().toString().trim();
+
         // validate input
         boolean check = true;
         String emptyError = getString(R.string.empty_error);
-        if (reporter.getText().length() == 0) {
+
+        if (reporterString.length() == 0) {
             reporter.requestFocus();
             reporter.setError(emptyError);
             check = false;
         }
         // reporter name alphabets only
-        else if (!reporter.getText().toString().matches("[a-zA-Z ]+")) {
+        else if (!reporterString.matches("[a-zA-Z ]+")) {
             reporter.requestFocus();
             reporter.setError(getString(R.string.invalid_error));
             check = false;
         }
 
-        if (date.getText().length() == 0) {
+        if (dateString.length() == 0) {
             date.setError(emptyError);
             check = false;
         }
-        if (activityName.getText().length() == 0) {
+        if (activityNameString.length() == 0) {
             activityName.requestFocus();
             activityName.setError(emptyError);
             check = false;
@@ -133,12 +143,6 @@ public class InputActivity extends AppCompatActivity {
 
         // send input to ConfirmActivity
         if (check) {
-            String activityNameString = activityName.getText().toString();
-            String locationString = (location.getText().length() == 0)? "-" : location.getText().toString();
-            String dateString = date.getText().toString();
-            String timeString = (time.getText().length() == 0)? "-" : time.getText().toString();
-            String reporterString = reporter.getText().toString();
-
             // send bundle and display dialog for confirmation
             Bundle bundle = new Bundle();
             bundle.putString(ConfirmInputDialog.ACTIVITY_NAME, activityNameString);
