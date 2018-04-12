@@ -36,4 +36,8 @@ public class CustomListAdapter extends ArrayAdapter {
 
         return rowView;
     }
+
+    public void update(ArrayList<KidActivity> newArray) {
+        array = newArray;
+    }
 }

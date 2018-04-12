@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         parentView = findViewById(R.id.coordinator);
 
-        // retrieve arraylist from database
+        // retrieve list of kidActivity from database
         UserSQL db = new UserSQL(this);
         array = db.getKidActivityList();
 
@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
                 // update arraylist and refresh listview
                 UserSQL db = new UserSQL(this);
                 array = db.getKidActivityList();
-                listViewAdapter.add(array.get(array.size()-1));
+                listViewAdapter.update(array);
                 listViewAdapter.notifyDataSetChanged();
 
                 Snackbar.make(parentView,
