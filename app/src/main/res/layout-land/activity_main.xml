@@ -2,16 +2,22 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/notice"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.jspr97.mykid.MainActivity">
 
-    <FrameLayout
-        android:id="@+id/frameLayoutList"
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/coordinator"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="1"/>
+        android:layout_weight="1">
+
+        <FrameLayout
+            android:id="@+id/frameLayoutList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+    </android.support.design.widget.CoordinatorLayout>
 
     <FrameLayout
         android:id="@+id/frameLayoutDetail"

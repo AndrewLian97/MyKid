@@ -74,8 +74,7 @@ public class ListViewFragment extends ListFragment {
         // update arraylist and refresh listview
         UserSQL db = new UserSQL(getActivity());
         array = db.getKidActivityList();
-        adapter.update(array);
-        adapter.notifyDataSetChanged();
+        adapter = new CustomListAdapter(getActivity(), array);
+        setListAdapter(adapter);
     }
-
 }

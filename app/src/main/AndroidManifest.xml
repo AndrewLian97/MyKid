@@ -20,12 +20,10 @@
             android:name=".InputActivity"
             android:label="@string/new_activity"
             android:parentActivityName=".MainActivity"
-            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".ViewActivity"
-            android:parentActivityName=".MainActivity"
-            android:screenOrientation="portrait"/>
+            android:parentActivityName=".MainActivity"/>
 
         <meta-data
             android:name="preloaded_fonts"

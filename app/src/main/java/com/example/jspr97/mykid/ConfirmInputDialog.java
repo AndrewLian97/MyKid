@@ -77,7 +77,7 @@ public class ConfirmInputDialog extends AppCompatDialogFragment {
                         db.insert(newActivity);
 
                         // return to main activity
-                        currentActivity.setResult(Activity.RESULT_OK, currentActivity.getIntent());
+                        currentActivity.setResult(Activity.RESULT_OK);
                         currentActivity.finish();
                     }
                 });

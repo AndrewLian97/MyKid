@@ -1,6 +1,5 @@
 package com.example.jspr97.mykid;
 
-import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
@@ -8,22 +7,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.FrameLayout;
-import android.widget.ListView;
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-
-    public static final String PREFERENCES = "prefs";
-    public static final String KEY = "activities";
-
     private static final int REQUEST_CODE = 1;
-    private ArrayList<KidActivity> array;
-    private ListView listView;
-    private CustomListAdapter listViewAdapter;
-    private View parentView;
+    private View coordinatorView;
     private boolean landscape;
     private ListViewFragment listViewFragment;
 
@@ -31,10 +19,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        parentView = findViewById(R.id.notice);
 
         listViewFragment = null;
         FrameLayout frameLayout = findViewById(R.id.frameLayout);
+        coordinatorView = findViewById(R.id.coordinator);
 
         // if this is under portrait mode
         if (frameLayout != null) {
@@ -54,10 +42,11 @@ public class MainActivity extends AppCompatActivity {
         } else {
             // landscape mode
             landscape = true;
+
             FragmentTransaction t2 = getSupportFragmentManager().beginTransaction();
             listViewFragment = (ListViewFragment) getSupportFragmentManager().findFragmentById(R.id.frameLayoutList);
 
-            // add master fragment
+            // add list fragment
             if (listViewFragment == null) {
                 listViewFragment = new ListViewFragment();
                 t2.add(R.id.frameLayoutList, listViewFragment);
@@ -121,7 +110,8 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 listViewFragment.updateResult();
-                Snackbar.make(parentView,
+
+                Snackbar.make(coordinatorView,
                         "New activity added",
                         Snackbar.LENGTH_LONG).show();
             }
