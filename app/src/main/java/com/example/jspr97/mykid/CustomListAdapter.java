@@ -2,10 +2,13 @@ package com.example.jspr97.mykid;
 
 import android.app.Activity;
 import android.util.SparseBooleanArray;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -14,6 +17,7 @@ import java.util.ArrayList;
 public class CustomListAdapter extends ArrayAdapter {
 
     private ArrayList<KidActivity> array;
+    private ArrayList<KidActivity> filterList = null;
     private final Activity context;
     private SparseBooleanArray mSelectedItemsIds;
 
@@ -23,6 +27,8 @@ public class CustomListAdapter extends ArrayAdapter {
         mSelectedItemsIds = new SparseBooleanArray();
         this.context = context;
         this.array = array;
+        filterList = new ArrayList<KidActivity>();
+        filterList.addAll(array);
     }
 
     public View getView(int position, View view, ViewGroup parent) {
@@ -70,4 +76,26 @@ public class CustomListAdapter extends ArrayAdapter {
     public void update(ArrayList<KidActivity> newArray) {
         array = newArray;
     }
+    public void filter(String query) {
+        query = query.toLowerCase();
+        array.clear();
+        if (query.length() == 0)
+            array.addAll(filterList);
+        else {
+            // filter by activity name
+            for (KidActivity x : filterList) {
+                if (!array.contains(x) && x.getName().toLowerCase().contains(query)) {
+                    array.add(x);
+                }
+            }
+            // filter by reporter name
+            for (KidActivity x: filterList) {
+                if (!array.contains(x) && x.getReporter().toLowerCase().contains(query)) {
+                    array.add(x);
+                }
+            }
+        }
+        notifyDataSetChanged();
+    }
+}
 }

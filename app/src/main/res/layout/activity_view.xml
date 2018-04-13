@@ -1,183 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
-    tools:context="com.example.jspr97.mykid.ViewActivity">
+    android:orientation="vertical">
 
-    <android.support.constraint.ConstraintLayout
+    <include
+        android:id="@+id/toolbar2"
+        layout="@layout/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content" />
 
-        <TextView
-            android:id="@+id/activitynameID"
-            android:layout_width="290dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="51dp"
-            android:layout_marginTop="10dp"
-            android:minHeight="55dp"
-            android:text="Lorem Ipsum"
-            android:textColor="@android:color/black"
-            android:textSize="35sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/nameLabel" />
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary">
 
-        <TextView
-            android:id="@+id/nameofreporterID"
-            android:layout_width="290dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="51dp"
-            android:layout_marginTop="10dp"
-            android:minHeight="40dp"
-            android:text="Lorem Ipsum"
-            android:textColor="@android:color/black"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/nameOfReporterLabel" />
+    </android.support.design.widget.TabLayout>
 
-        <TextView
-            android:id="@+id/timeID"
-            android:layout_width="120dp"
-            android:layout_height="25dp"
-            android:layout_marginStart="55dp"
-            android:layout_marginTop="10dp"
-            android:text="Lorem Ipsum"
-            android:textColor="@android:color/black"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@+id/dateID"
-            app:layout_constraintTop_toBottomOf="@+id/ic_time" />
-
-        <TextView
-            android:id="@+id/dateID"
-            android:layout_width="120dp"
-            android:layout_height="25dp"
-            android:layout_marginStart="51dp"
-            android:layout_marginTop="10dp"
-            android:text="Lorem Ipsum"
-            android:textColor="@android:color/black"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ic_date" />
-
-        <TextView
-            android:id="@+id/locationID"
-            android:layout_width="290dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="51dp"
-            android:layout_marginTop="10dp"
-            android:minHeight="40dp"
-            android:text="Lorem Ipsum"
-            android:textAllCaps="false"
-            android:textColor="@android:color/black"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/locationLabel" />
-
-        <TextView
-            android:id="@+id/nameLabel"
-            android:layout_width="165dp"
-            android:layout_height="25dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="28dp"
-            android:text="@string/activity_name"
-            app:layout_constraintStart_toEndOf="@+id/ic_activity_name"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/dateLabel"
-            android:layout_width="120dp"
-            android:layout_height="25dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="28dp"
-            android:text="@string/date"
-            app:layout_constraintStart_toEndOf="@+id/ic_date"
-            app:layout_constraintTop_toBottomOf="@+id/locationID" />
-
-        <TextView
-            android:id="@+id/timeLabel"
-            android:layout_width="120dp"
-            android:layout_height="25dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="28dp"
-            android:text="@string/time"
-            app:layout_constraintStart_toEndOf="@+id/ic_time"
-            app:layout_constraintTop_toBottomOf="@+id/locationID" />
-
-        <TextView
-            android:id="@+id/nameOfReporterLabel"
-            android:layout_width="165dp"
-            android:layout_height="25dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="28dp"
-            android:text="@string/reporter_name"
-            app:layout_constraintStart_toEndOf="@+id/ic_nameofreporter"
-            app:layout_constraintTop_toBottomOf="@+id/timeID" />
-
-        <TextView
-            android:id="@+id/locationLabel"
-            android:layout_width="165dp"
-            android:layout_height="25dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="28dp"
-            android:text="@string/location"
-            app:layout_constraintStart_toEndOf="@+id/imageView2"
-            app:layout_constraintTop_toBottomOf="@+id/activitynameID" />
-
-        <ImageView
-            android:id="@+id/ic_nameofreporter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="28dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/dateID"
-            app:srcCompat="@drawable/ic_name_of_reporter" />
-
-        <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="28dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/activitynameID"
-            app:srcCompat="@drawable/ic_location" />
-
-        <ImageView
-            android:id="@+id/ic_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="28dp"
-            app:layout_constraintStart_toEndOf="@+id/dateLabel"
-            app:layout_constraintTop_toBottomOf="@+id/locationID"
-            app:srcCompat="@drawable/ic_time" />
-
-        <ImageView
-            android:id="@+id/ic_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="28dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/locationID"
-            app:srcCompat="@drawable/ic_date" />
-
-        <ImageView
-            android:id="@+id/ic_activity_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="28dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_name_activity" />
-    </android.support.constraint.ConstraintLayout>
-</ScrollView>
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+</LinearLayout>

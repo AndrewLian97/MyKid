@@ -7,20 +7,15 @@
     android:layout_height="match_parent"
     tools:context="com.example.jspr97.mykid.MainActivity">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?android:attr/actionBarSize"
-        android:background="@color/colorPrimary"
-        android:elevation="4dp"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:titleTextColor="@android:color/white" />
+    <include
+        layout="@layout/toolbar"
+        android:id="@+id/toolbar"/>
 
     <FrameLayout
         android:id="@+id/frameLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="?android:attr/actionBarSize"
         android:orientation="vertical">
 
         <TextView
@@ -43,6 +38,8 @@
         android:onClick="onClickAdd"
         android:scaleType="center"
         android:tint="@android:color/white"
+        app:backgroundTint="@color/colorAccent"
+        app:elevation="6dp"
         app:fabSize="normal"
         app:layout_anchor="@id/frameLayout"
         app:layout_anchorGravity="bottom|right|end"

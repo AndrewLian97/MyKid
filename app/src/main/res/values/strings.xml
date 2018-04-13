@@ -12,4 +12,11 @@
     <string name="list_empty">No activities to show</string>
     <string name="delete_menu">Delete</string>
     <string name="search_menu">Search activity</string>
+    <string name="sort_menu">Sort by...</string>
+    <string name="sort_alphabet_asc">A-Z</string>
+    <string name="sort_alphabet_des">Z-A</string>
+    <string name="sort_date_asc">Date (oldest)</string>
+    <string name="sort_date_des">Date (newest)</string>
+    <string name="details_tab">Details</string>
+    <string name="images_tab">Images</string>
 </resources>

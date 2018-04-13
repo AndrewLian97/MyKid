@@ -1,36 +1,35 @@
 package com.example.jspr97.mykid;
 
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.TextView;
+import android.support.v7.widget.Toolbar;
 
 public class ViewActivity extends AppCompatActivity {
+
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view);
+        Toolbar toolbar = findViewById(R.id.toolbar2);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Activity Details");
 
-        // set references
-        TextView myText = (TextView) findViewById(R.id.activitynameID);
-        TextView myText1 = (TextView) findViewById(R.id.locationID);
-        TextView myText2 = (TextView) findViewById(R.id.dateID);
-        TextView myText3 = (TextView) findViewById(R.id.timeID);
-        TextView myText4 = (TextView) findViewById(R.id.nameofreporterID);
+        tabLayout = findViewById(R.id.tabLayout);
+        viewPager = findViewById(R.id.viewPager);
+        tabLayout.addTab(tabLayout.newTab().setText("DETAILS"));
+        tabLayout.addTab(tabLayout.newTab().setText("IMAGES"));
+        tabLayout.setupWithViewPager(viewPager);
 
-        // retrieve strings from intent
-        String savedExtra = getIntent().getStringExtra("name");
-        String savedExtra1 = getIntent().getStringExtra("location");
-        String savedExtra2 = getIntent().getStringExtra("date");
-        String savedExtra3 = getIntent().getStringExtra("time");
-        String savedExtra4 = getIntent().getStringExtra("nameofreporter");
-
-        // display strings
-        myText.setText(savedExtra);
-        myText1.setText(savedExtra1);
-        myText2.setText(savedExtra2);
-        myText3.setText(savedExtra3);
-        myText4.setText(savedExtra4);
-
+        CustomPagerAdapter adapter = new CustomPagerAdapter(getSupportFragmentManager());
+        adapter.addFragment(new ListDetailFragment(), "details");
+        adapter.addFragment(new ListDetailFragment(), "media");
+        viewPager.setAdapter(adapter);
     }
 }

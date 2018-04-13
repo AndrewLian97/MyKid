@@ -39,6 +39,7 @@ public class ListViewFragment extends ListFragment {
     @Override
     public void onViewCreated(View v, Bundle savedInstanceState) {
         super.onViewCreated(v, savedInstanceState);
+        setEmptyText("No activities to show");
 
         // retrieve list of kidActivity from database
         UserSQL db = new UserSQL(getActivity());
@@ -127,5 +128,9 @@ public class ListViewFragment extends ListFragment {
         array = db.getKidActivityList();
         adapter = new CustomListAdapter(getActivity(), array);
         setListAdapter(adapter);
+    }
+
+    public void filterList(String query) {
+        adapter.filter(query);
     }
 }

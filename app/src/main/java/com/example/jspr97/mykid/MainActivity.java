@@ -1,6 +1,7 @@
 package com.example.jspr97.mykid;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -10,7 +11,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.support.v7.widget.SearchView;
 
 public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_CODE = 1;
@@ -92,9 +95,10 @@ public class MainActivity extends AppCompatActivity {
             findViewById(R.id.frameLayoutDetail).setVisibility(View.VISIBLE);
 
         } else {
-            // display details in another screen
+            // if portrait, display details in another screen
             Intent intent = new Intent(this, ViewActivity.class);
-            startActivity(intent, bundle);
+            intent.putExtras(bundle);
+            startActivity(intent);
         }
     }
 
@@ -124,7 +128,47 @@ public class MainActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
 
-        return true;
+        // setup search bar
+        MenuItem search = menu.findItem(R.id.action_search);
+        final SearchView searchView = (SearchView) search.getActionView();
+        searchView.setQueryHint("Search activity");
+        EditText searchText = searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+        searchText.setTextColor(Color.WHITE);
+        searchText.setHintTextColor(Color.WHITE);
+
+        // filter list by query
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                searchView.clearFocus();
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                listViewFragment.filterList(newText);
+                return false;
+            }
+        });
+
+        search.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                searchView.requestFocus();
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                // clear filter on exit search
+                listViewFragment.filterList("");
+                searchView.setQuery("", false);
+                searchView.clearFocus();
+                return true;
+            }
+        });
+
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
