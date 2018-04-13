@@ -5,6 +5,10 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
+import android.util.SparseBooleanArray;
+import android.view.ActionMode;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -13,6 +17,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import android.widget.AbsListView.MultiChoiceModeListener;
+
 
 public class ListViewFragment extends ListFragment {
 
@@ -44,7 +50,7 @@ public class ListViewFragment extends ListFragment {
         setListAdapter(adapter);
 
         // minor configuration on the list
-        getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
 
         // implement onItemClickListener
         getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -56,7 +62,64 @@ public class ListViewFragment extends ListFragment {
                 }
             }
         });
-    }
+
+        getListView().setMultiChoiceModeListener(new MultiChoiceModeListener() {
+
+            @Override
+            public void onItemCheckedStateChanged(ActionMode mode,
+                                                  int position, long id, boolean checked) {
+                // Capture total checked items
+                final int checkedCount = getListView().getCheckedItemCount();
+                // Set the CAB title according to total checked items
+                mode.setTitle(checkedCount + " Selected");
+                // Calls toggleSelection method from ListViewAdapter Class
+                adapter.toggleSelection(position);
+            }
+            @Override
+            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.action_delete:
+                        // Calls getSelectedIds method from ListViewAdapter Class
+                        SparseBooleanArray selected = adapter
+                                .getSelectedIds();
+                        // Captures all selected ids with a loop
+                        for (int i = (selected.size() - 1); i >= 0; i--) {
+                            if (selected.valueAt(i)) {
+                                KidActivity selectedItem = (KidActivity) adapter
+                                        .getItem(selected.keyAt(i));
+                                // Remove selected items following the ids
+                                adapter.remove(selectedItem);
+                                UserSQL db = new UserSQL(getActivity());
+                                db.delete(selectedItem.getId());
+                            }
+                        }
+                        // Close CAB
+                        mode.finish();
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+
+            @Override
+            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                mode.getMenuInflater().inflate(R.menu.main_menu, menu);
+                return true;
+            }
+
+            @Override
+            public void onDestroyActionMode(ActionMode mode) {
+                // TODO Auto-generated method stub
+                adapter.removeSelection();
+            }
+
+            @Override
+            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                // TODO Auto-generated method stub
+                return false;
+            }
+        });
+        }
 
     public void updateResult() {
         // update arraylist and refresh listview

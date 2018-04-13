@@ -1,6 +1,7 @@
 package com.example.jspr97.mykid;
 
 import android.app.Activity;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,10 +15,12 @@ public class CustomListAdapter extends ArrayAdapter {
 
     private ArrayList<KidActivity> array;
     private final Activity context;
+    private SparseBooleanArray mSelectedItemsIds;
 
     public CustomListAdapter(Activity context, ArrayList<KidActivity> array ) {
         super(context, R.layout.listview_row, array);
 
+        mSelectedItemsIds = new SparseBooleanArray();
         this.context = context;
         this.array = array;
     }
@@ -36,6 +39,33 @@ public class CustomListAdapter extends ArrayAdapter {
 
         return rowView;
     }
+
+    public void toggleSelection(int position) {
+        selectView(position, !mSelectedItemsIds.get(position));
+    }
+
+    public void removeSelection() {
+        mSelectedItemsIds = new SparseBooleanArray();
+        notifyDataSetChanged();
+    }
+
+    public void selectView(int position, boolean value) {
+        if (value)
+            mSelectedItemsIds.put(position, value);
+        else
+            mSelectedItemsIds.delete(position);
+        notifyDataSetChanged();
+    }
+
+    public int getSelectedCount() {
+        return mSelectedItemsIds.size();
+    }
+
+    public SparseBooleanArray getSelectedIds() {
+        return mSelectedItemsIds;
+    }
+
+
 
     public void update(ArrayList<KidActivity> newArray) {
         array = newArray;
