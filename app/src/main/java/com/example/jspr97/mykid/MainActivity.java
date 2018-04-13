@@ -5,7 +5,10 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 
@@ -19,6 +22,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         listViewFragment = null;
         FrameLayout frameLayout = findViewById(R.id.frameLayout);
@@ -65,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
         listViewFragment.setOnMasterSelectedListener(new ListViewFragment.onMasterSelectedListener() {
             @Override
             public void onItemSelected(KidActivity kidActivity) {
-            sendActivity(kidActivity);
+                sendActivity(kidActivity);
             }
         });
     }
@@ -74,26 +79,22 @@ public class MainActivity extends AppCompatActivity {
         ListDetailFragment listDetailFragment;
 
         Bundle bundle = new Bundle();
-        bundle.putString(kidActivity.getName(), "name");
-        bundle.putString(kidActivity.getLocation(), "location");
-        bundle.putString(kidActivity.getDate(), "date");
-        bundle.putString(kidActivity.getTime(), "time");
-        bundle.putString(kidActivity.getReporter(), "nameofreporter");
+        bundle.putString("name", kidActivity.getName());
+        bundle.putString("location", kidActivity.getLocation());
+        bundle.putString("date", kidActivity.getDate());
+        bundle.putString("time", kidActivity.getTime());
+        bundle.putString("nameofreporter", kidActivity.getReporter());
 
+        // if landscape mode, show beside
         if (landscape) {
             listDetailFragment = (ListDetailFragment) getSupportFragmentManager().findFragmentById(R.id.frameLayoutDetail);
-
             listDetailFragment.showDetails(bundle);
+            findViewById(R.id.frameLayoutDetail).setVisibility(View.VISIBLE);
+
         } else {
-            // single pane layout
-            listDetailFragment = new ListDetailFragment();
-            listDetailFragment.setArguments(bundle);
-
-            FragmentTransaction t3 = getSupportFragmentManager().beginTransaction();
-
-            t3.replace(R.id.frameLayoutList, listDetailFragment);
-            t3.addToBackStack(null);
-            t3.commit();
+            // display details in another screen
+            Intent intent = new Intent(this, ViewActivity.class);
+            startActivity(intent, bundle);
         }
     }
 
@@ -115,6 +116,26 @@ public class MainActivity extends AppCompatActivity {
                         "New activity added",
                         Snackbar.LENGTH_LONG).show();
             }
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // delete option selected
+            case R.id.action_delete:
+                // DELETE HERE
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 }

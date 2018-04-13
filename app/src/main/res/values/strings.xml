@@ -10,4 +10,6 @@
     <string name="invalid_error">Invalid name</string>
     <string name="confirm">Confirmation</string>
     <string name="list_empty">No activities to show</string>
+    <string name="delete_menu">Delete</string>
+    <string name="search_menu">Search activity</string>
 </resources>
