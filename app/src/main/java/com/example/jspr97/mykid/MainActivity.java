@@ -16,7 +16,8 @@ import android.widget.FrameLayout;
 import android.support.v7.widget.SearchView;
 
 public class MainActivity extends AppCompatActivity {
-    private static final int REQUEST_CODE = 1;
+    private static final int REQUEST_CODE_NEW = 1;
+    private static final int REQUEST_CODE_VIEW = 2;
     private View coordinatorView;
     private boolean landscape;
     private ListViewFragment listViewFragment;
@@ -82,11 +83,7 @@ public class MainActivity extends AppCompatActivity {
         ListDetailFragment listDetailFragment;
 
         Bundle bundle = new Bundle();
-        bundle.putString("name", kidActivity.getName());
-        bundle.putString("location", kidActivity.getLocation());
-        bundle.putString("date", kidActivity.getDate());
-        bundle.putString("time", kidActivity.getTime());
-        bundle.putString("nameofreporter", kidActivity.getReporter());
+        bundle.putInt(KidActivity.KEY_ID, kidActivity.getId());
 
         // if landscape mode, show beside
         if (landscape) {
@@ -95,41 +92,53 @@ public class MainActivity extends AppCompatActivity {
             findViewById(R.id.frameLayoutDetail).setVisibility(View.VISIBLE);
 
         } else {
-            // if portrait, display details in another screen
+            // if portrait, display details in ViewActivity
             Intent intent = new Intent(this, ViewActivity.class);
             intent.putExtras(bundle);
-            startActivity(intent);
+            startActivityForResult(intent, REQUEST_CODE_VIEW);
         }
     }
 
     public void onClickAdd(View view) {
         // go to input screen
         Intent intent = new Intent(this,InputActivity.class);
-        startActivityForResult(intent, REQUEST_CODE);
+        startActivityForResult(intent, REQUEST_CODE_NEW);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == REQUEST_CODE) {
+        // new kid activity added
+        if (requestCode == REQUEST_CODE_NEW) {
             if (resultCode == RESULT_OK) {
                 listViewFragment.updateResult();
 
+                // display message
                 Snackbar.make(coordinatorView,
                         "New activity added",
+                        Snackbar.LENGTH_LONG).show();
+            }
+        } // kid activity deleted
+        else if (requestCode == REQUEST_CODE_VIEW) {
+            if (resultCode == RESULT_OK) {
+                listViewFragment.updateResult();
+
+                // display message
+                Snackbar.make(coordinatorView,
+                        "Activity deleted",
                         Snackbar.LENGTH_LONG).show();
             }
         }
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(final Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
 
         // setup search bar
-        MenuItem search = menu.findItem(R.id.action_search);
+        final MenuItem search = menu.findItem(R.id.action_search);
         final SearchView searchView = (SearchView) search.getActionView();
         searchView.setQueryHint("Search activity");
         EditText searchText = searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
@@ -155,6 +164,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onMenuItemActionExpand(MenuItem item) {
                 searchView.requestFocus();
+                setMenuItemVisible(menu, search, false); // hide other menu items
                 return true;
             }
 
@@ -164,11 +174,21 @@ public class MainActivity extends AppCompatActivity {
                 listViewFragment.filterList("");
                 searchView.setQuery("", false);
                 searchView.clearFocus();
+                setMenuItemVisible(menu, search, true); // restore menu items
                 return true;
             }
         });
 
         return super.onCreateOptionsMenu(menu);
+    }
+
+    private void setMenuItemVisible(Menu menu, MenuItem search, boolean visible) {
+        // toggle visibility of menu items
+        for (int i = 0; i < menu.size(); i++) {
+            MenuItem item = menu.getItem(i);
+            if (item != search)
+                item.setVisible(visible);
+        }
     }
 
     @Override

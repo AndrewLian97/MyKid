@@ -1,9 +1,10 @@
 package com.example.jspr97.mykid;
 
-import android.content.Intent;
-import android.content.res.Configuration;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ListFragment;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
@@ -11,10 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import android.widget.AbsListView.MultiChoiceModeListener;
@@ -30,10 +28,18 @@ public class ListViewFragment extends ListFragment {
     private onMasterSelectedListener myListener = null;
     private ArrayList<KidActivity> array;
     private CustomListAdapter adapter;
+    private ActionMode actionMode;
 
     // a method to accept listener from host activity
     public void setOnMasterSelectedListener(onMasterSelectedListener listener) {
         myListener = listener;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (actionMode != null)
+            actionMode.finish();    // close CAB when change screen
     }
 
     @Override
@@ -45,12 +51,11 @@ public class ListViewFragment extends ListFragment {
         UserSQL db = new UserSQL(getActivity());
         array = db.getKidActivityList();
 
+        // set list adapter
         adapter = new CustomListAdapter(getActivity(), array);
-
-        // set adapter
         setListAdapter(adapter);
 
-        // minor configuration on the list
+        // enable multiple select
         getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
 
         // implement onItemClickListener
@@ -64,6 +69,7 @@ public class ListViewFragment extends ListFragment {
             }
         });
 
+        // multi select list items
         getListView().setMultiChoiceModeListener(new MultiChoiceModeListener() {
 
             @Override
@@ -80,22 +86,43 @@ public class ListViewFragment extends ListFragment {
             public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_delete:
-                        // Calls getSelectedIds method from ListViewAdapter Class
-                        SparseBooleanArray selected = adapter
-                                .getSelectedIds();
-                        // Captures all selected ids with a loop
-                        for (int i = (selected.size() - 1); i >= 0; i--) {
-                            if (selected.valueAt(i)) {
-                                KidActivity selectedItem = (KidActivity) adapter
-                                        .getItem(selected.keyAt(i));
-                                // Remove selected items following the ids
-                                adapter.remove(selectedItem);
-                                UserSQL db = new UserSQL(getActivity());
-                                db.delete(selectedItem.getId());
-                            }
-                        }
-                        // Close CAB
-                        mode.finish();
+                        // confirmation dialog
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                        builder.setTitle("Confirm Delete")
+                                .setMessage("Are you sure you want to delete?")
+                                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // Calls getSelectedIds method from ListViewAdapter Class
+                                        SparseBooleanArray selected = adapter
+                                                .getSelectedIds();
+                                        int n = adapter.getSelectedCount();
+                                        // Captures all selected ids with a loop
+                                        for (int i = (selected.size() - 1); i >= 0; i--) {
+                                            if (selected.valueAt(i)) {
+                                                KidActivity selectedItem = (KidActivity) adapter
+                                                        .getItem(selected.keyAt(i));
+
+                                                // Remove selected items following the ids
+                                                adapter.remove(selectedItem);
+                                                UserSQL db = new UserSQL(getActivity());
+                                                db.delete(selectedItem.getId());
+                                            }
+                                        }
+                                        // Close CAB
+                                        actionMode.finish();
+
+                                        Snackbar.make(getActivity().findViewById(R.id.coordinator),
+                                                 n + " deleted", Snackbar.LENGTH_LONG).show();
+                                    }
+                                })
+                                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+
+                                    }
+                                });
+                        builder.show();
                         return true;
                     default:
                         return false;
@@ -104,13 +131,14 @@ public class ListViewFragment extends ListFragment {
 
             @Override
             public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-                mode.getMenuInflater().inflate(R.menu.main_menu, menu);
+                mode.getMenuInflater().inflate(R.menu.cab_menu, menu);
+                actionMode = mode;
                 return true;
             }
 
             @Override
             public void onDestroyActionMode(ActionMode mode) {
-                // TODO Auto-generated method stub
+                actionMode = null;
                 adapter.removeSelection();
             }
 

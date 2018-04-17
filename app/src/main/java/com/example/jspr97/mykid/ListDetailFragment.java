@@ -10,7 +10,7 @@ import android.widget.TextView;
 public class ListDetailFragment extends android.support.v4.app.Fragment {
 
     private View rootView;
-
+    private TextView myText, myText1, myText2, myText3, myText4;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -18,6 +18,14 @@ public class ListDetailFragment extends android.support.v4.app.Fragment {
 
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.activity_details, container, false);
+
+        // set references
+        myText = rootView.findViewById(R.id.activitynameID);
+        myText1 = rootView.findViewById(R.id.locationID);
+        myText2 = rootView.findViewById(R.id.dateID);
+        myText3 = rootView.findViewById(R.id.timeID);
+        myText4 = rootView.findViewById(R.id.nameofreporterID);
+
         return rootView;
     }
 
@@ -25,7 +33,7 @@ public class ListDetailFragment extends android.support.v4.app.Fragment {
     public void onStart() {
         super.onStart();
 
-        // argument set in MainActivity using setArguments
+        // arguments set from ViewActivity
         Bundle bundle = getArguments();
 
         if (bundle != null) {
@@ -34,26 +42,17 @@ public class ListDetailFragment extends android.support.v4.app.Fragment {
     }
 
     public void showDetails(Bundle bundle){
-        // set references
-        TextView myText = rootView.findViewById(R.id.activitynameID);
-        TextView myText1 = rootView.findViewById(R.id.locationID);
-        TextView myText2 = rootView.findViewById(R.id.dateID);
-        TextView myText3 = rootView.findViewById(R.id.timeID);
-        TextView myText4 = rootView.findViewById(R.id.nameofreporterID);
-
-        // retrieve strings from intent
-        String savedExtra = bundle.getString("name");
-        String savedExtra1 = bundle.getString("location");
-        String savedExtra2 = bundle.getString("date");
-        String savedExtra3 = bundle.getString("time");
-        String savedExtra4 = bundle.getString("nameofreporter");
+        // retrieve strings
+        int id = bundle.getInt(KidActivity.KEY_ID);
+        UserSQL db = new UserSQL(getActivity());
+        KidActivity kidActivity = db.getKidActivity(id);
 
         // display strings
-        myText.setText(savedExtra);
-        myText1.setText(savedExtra1);
-        myText2.setText(savedExtra2);
-        myText3.setText(savedExtra3);
-        myText4.setText(savedExtra4);
+        myText.setText(kidActivity.getName());
+        myText1.setText(kidActivity.getLocation());
+        myText2.setText(kidActivity.getDate());
+        myText3.setText(kidActivity.getTime());
+        myText4.setText(kidActivity.getReporter());
     }
 }
 

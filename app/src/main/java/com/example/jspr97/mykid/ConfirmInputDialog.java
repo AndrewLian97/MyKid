@@ -13,15 +13,17 @@ import android.widget.TextView;
 
 public class ConfirmInputDialog extends AppCompatDialogFragment {
 
-    // bundle keys
-    public static final String ACTIVITY_NAME = "activity name";
-    public static final String LOCATION = "location";
-    public static final String DATE = "date";
-    public static final String TIME = "time";
-    public static final String REPORTER = "reporter";
+    public interface onClickDialogListener {
+        public void onClickPositive();
+    }
 
     private TextView activityName, location, date, time, reporter;
     private String activityNameString, locationString, dateString, timeString, reporterString;
+    private onClickDialogListener listener = null;
+
+    public void setOnClickDialogListener(onClickDialogListener listener) {
+        this.listener = listener;
+    }
 
     @Override
     public Dialog onCreateDialog(final Bundle savedInstanceState) {
@@ -40,11 +42,11 @@ public class ConfirmInputDialog extends AppCompatDialogFragment {
         reporter = view.findViewById(R.id.reporter);
 
         // retrieve strings from bundle
-        activityNameString = getArguments().getString(ACTIVITY_NAME);
-        locationString = getArguments().getString(LOCATION);
-        dateString = getArguments().getString(DATE);
-        timeString = getArguments().getString(TIME);
-        reporterString = getArguments().getString(REPORTER);
+        activityNameString = getArguments().getString(KidActivity.KEY_NAME);
+        locationString = getArguments().getString(KidActivity.KEY_LOCATION);
+        dateString = getArguments().getString(KidActivity.KEY_DATE);
+        timeString = getArguments().getString(KidActivity.KEY_TIME);
+        reporterString = getArguments().getString(KidActivity.KEY_REPORTER);
 
         // display the strings in textview
         activityName.setText(activityNameString);
@@ -65,20 +67,8 @@ public class ConfirmInputDialog extends AppCompatDialogFragment {
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        // store data into new KidActivity object
-                        KidActivity newActivity = new KidActivity(activityNameString,
-                                                                    locationString,
-                                                                    dateString,
-                                                                    timeString,
-                                                                    reporterString);
-
-                        // insert to database
-                        UserSQL db = new UserSQL(currentActivity);
-                        db.insert(newActivity);
-
-                        // return to main activity
-                        currentActivity.setResult(Activity.RESULT_OK);
-                        currentActivity.finish();
+                        if (listener != null)
+                            listener.onClickPositive();
                     }
                 });
 

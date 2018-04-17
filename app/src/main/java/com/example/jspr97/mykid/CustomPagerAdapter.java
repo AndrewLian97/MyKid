@@ -3,7 +3,6 @@ package com.example.jspr97.mykid;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.view.ViewGroup;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,9 +26,9 @@ public class CustomPagerAdapter extends FragmentPagerAdapter {
         return fragmentList.size();
     }
 
-    public void addFragment(Fragment fragment, String id) {
+    public void addFragment(Fragment fragment, String title) {
         fragmentList.add(fragment);
-        fragmentTitleList.add(id);
+        fragmentTitleList.add(title);
     }
 
     @Override

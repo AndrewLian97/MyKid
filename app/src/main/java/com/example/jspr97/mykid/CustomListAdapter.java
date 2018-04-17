@@ -27,6 +27,7 @@ public class CustomListAdapter extends ArrayAdapter {
         mSelectedItemsIds = new SparseBooleanArray();
         this.context = context;
         this.array = array;
+
         filterList = new ArrayList<KidActivity>();
         filterList.addAll(array);
     }
@@ -35,11 +36,11 @@ public class CustomListAdapter extends ArrayAdapter {
         LayoutInflater inflater=context.getLayoutInflater();
         View rowView=inflater.inflate(R.layout.listview_row, null,true);
 
-        //this code gets references to objects in the listview_row.xml file
-        TextView activityName = (TextView) rowView.findViewById(R.id.activitynameID);
-        TextView nameOfReporter = (TextView) rowView.findViewById(R.id.nameofreporterID);
+        // get references to objects in the listview_row.xml file
+        TextView activityName = rowView.findViewById(R.id.activitynameID);
+        TextView nameOfReporter = rowView.findViewById(R.id.nameofreporterID);
 
-        //this code sets the values of the objects to values from the arrays
+        // set text from the arrays
         activityName.setText(array.get(position).getName());
         nameOfReporter.setText(array.get(position).getReporter());
 
@@ -51,6 +52,7 @@ public class CustomListAdapter extends ArrayAdapter {
     }
 
     public void removeSelection() {
+        // clear selected
         mSelectedItemsIds = new SparseBooleanArray();
         notifyDataSetChanged();
     }
@@ -71,11 +73,6 @@ public class CustomListAdapter extends ArrayAdapter {
         return mSelectedItemsIds;
     }
 
-
-
-    public void update(ArrayList<KidActivity> newArray) {
-        array = newArray;
-    }
     public void filter(String query) {
         query = query.toLowerCase();
         array.clear();
