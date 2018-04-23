@@ -8,6 +8,11 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.ArrayList;
 
 public class UserSQL {
+    public static final int ALPHA_ASC = 1;
+    public static final int ALPHA_DESC = 2;
+    public static final int DATE_ASC = 3;
+    public static final int DATE_DESC = 4;
+
     private DBHelper dbHelper;
 
     public UserSQL(Context context) {
@@ -21,7 +26,7 @@ public class UserSQL {
         ContentValues values = new ContentValues();
         values.put(KidActivity.KEY_NAME, kidActivity.getName());
         values.put(KidActivity.KEY_LOCATION, kidActivity.getLocation());
-        values.put(KidActivity.KEY_DATE, kidActivity.getDate());
+        values.put(KidActivity.KEY_DATE, inputDateFormat(kidActivity.getDate()));
         values.put(KidActivity.KEY_TIME, kidActivity.getTime());
         values.put(KidActivity.KEY_REPORTER, kidActivity.getReporter());
 
@@ -42,7 +47,7 @@ public class UserSQL {
         ContentValues values = new ContentValues();
         values.put(KidActivity.KEY_NAME, kidActivity.getName());
         values.put(KidActivity.KEY_LOCATION, kidActivity.getLocation());
-        values.put(KidActivity.KEY_DATE, kidActivity.getDate());
+        values.put(KidActivity.KEY_DATE, inputDateFormat(kidActivity.getDate()));
         values.put(KidActivity.KEY_TIME, kidActivity.getTime());
         values.put(KidActivity.KEY_REPORTER, kidActivity.getReporter());
 
@@ -51,10 +56,8 @@ public class UserSQL {
         db.close();     // close connection
     }
 
-    public ArrayList<KidActivity> getKidActivityList() {
+    public ArrayList<KidActivity> getKidActivityList(int order) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-
-        // retrieve all rows alphabetically
         String query = "SELECT " +
                 KidActivity.KEY_ID + ", " +
                 KidActivity.KEY_NAME + ", " +
@@ -62,9 +65,22 @@ public class UserSQL {
                 KidActivity.KEY_DATE + ", " +
                 KidActivity.KEY_TIME + ", " +
                 KidActivity.KEY_REPORTER +
-                " FROM " + KidActivity.TABLE_NAME +
-                " ORDER BY " + KidActivity.KEY_NAME +
-                " COLLATE NOCASE";      // sort case insensitive
+                " FROM " + KidActivity.TABLE_NAME;
+        if (order == ALPHA_ASC) {
+            // retrieve all rows alphabetically
+            query += " ORDER BY " + KidActivity.KEY_NAME +
+                    " COLLATE NOCASE";      // sort case insensitive
+        } else if (order == ALPHA_DESC) {
+            // retrieve all rows alphabetically descending
+            query += " ORDER BY " + KidActivity.KEY_NAME +
+                    " COLLATE NOCASE DESC";
+        } else if (order == DATE_ASC) {
+            // retrieve all rows start from oldest
+            query += " ORDER BY date(" + KidActivity.KEY_DATE + ")";
+        } else if (order == DATE_DESC) {
+            // retrieve all rows start from newest
+            query += " ORDER BY date(" + KidActivity.KEY_DATE + ") DESC";
+        }
 
         ArrayList<KidActivity> kidActivityList = new ArrayList<KidActivity>();
         Cursor cursor = db.rawQuery(query, null);
@@ -76,7 +92,7 @@ public class UserSQL {
                 kidActivity.setId(cursor.getInt(cursor.getColumnIndex(KidActivity.KEY_ID)));
                 kidActivity.setName(cursor.getString(cursor.getColumnIndex(KidActivity.KEY_NAME)));
                 kidActivity.setLocation(cursor.getString(cursor.getColumnIndex(KidActivity.KEY_LOCATION)));
-                kidActivity.setDate(cursor.getString(cursor.getColumnIndex(KidActivity.KEY_DATE)));
+                kidActivity.setDate(outputDateFormat(cursor.getString(cursor.getColumnIndex(KidActivity.KEY_DATE))));
                 kidActivity.setTime(cursor.getString(cursor.getColumnIndex(KidActivity.KEY_TIME)));
                 kidActivity.setReporter(cursor.getString(cursor.getColumnIndex(KidActivity.KEY_REPORTER)));
                 kidActivityList.add(kidActivity);
@@ -111,7 +127,7 @@ public class UserSQL {
                 kidActivity.setId(cursor.getInt(cursor.getColumnIndex(KidActivity.KEY_ID)));
                 kidActivity.setName(cursor.getString(cursor.getColumnIndex(KidActivity.KEY_NAME)));
                 kidActivity.setLocation(cursor.getString(cursor.getColumnIndex(KidActivity.KEY_LOCATION)));
-                kidActivity.setDate(cursor.getString(cursor.getColumnIndex(KidActivity.KEY_DATE)));
+                kidActivity.setDate(outputDateFormat(cursor.getString(cursor.getColumnIndex(KidActivity.KEY_DATE))));
                 kidActivity.setTime(cursor.getString(cursor.getColumnIndex(KidActivity.KEY_TIME)));
                 kidActivity.setReporter(cursor.getString(cursor.getColumnIndex(KidActivity.KEY_REPORTER)));
             } while (cursor.moveToNext());
@@ -120,5 +136,21 @@ public class UserSQL {
         cursor.close();
         db.close();         // close connection
         return kidActivity;
+    }
+
+    private String inputDateFormat(String date) {
+        // format date to yyyy-mm-dd
+        String formatDate = date.substring(6) + '-' +
+                date.substring(3,5) + '-' +
+                date.substring(0,2);
+        return formatDate;
+    }
+
+    private String outputDateFormat(String date) {
+        // format date to dd/mm-/yyy
+        String displayDate = date.substring(8) + '/' +
+                date.substring(5,7) + '/' +
+                date.substring(0,4);
+        return displayDate;
     }
 }
