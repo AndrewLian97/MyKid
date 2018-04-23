@@ -261,6 +261,8 @@ public class InputActivity extends AppCompatActivity {
 
     private void updateActivity(KidActivity kidActivity) {
         // update activity in database
+        int id = getIntent().getIntExtra(KidActivity.KEY_ID, 0);
+        kidActivity.setId(id);
         UserSQL db = new UserSQL(this);
         db.update(kidActivity);
     }
