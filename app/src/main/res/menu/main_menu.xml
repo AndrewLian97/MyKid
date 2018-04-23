@@ -11,21 +11,25 @@
         app:showAsAction="always|collapseActionView" />
     <item
         android:id="@+id/action_sort"
-        android:title="@string/sort_menu" >
-        <menu >
-            <group android:checkableBehavior="single">
+        android:icon="@drawable/ic_sort_white_24dp"
+        android:title="@string/sort_menu"
+        app:showAsAction="always">
+        <menu>
+            <group
+                android:checkableBehavior="single"
+                android:enabled="true">
                 <item
-                    android:id="@+id/action_alphabet_asc"
+                    android:id="@+id/action_alpha_asc"
                     android:checked="true"
                     android:title="@string/sort_alphabet_asc" />
                 <item
-                    android:id="@+id/action_alphabet_des"
+                    android:id="@+id/action_alpha_desc"
                     android:title="@string/sort_alphabet_des" />
                 <item
                     android:id="@+id/action_date_asc"
                     android:title="@string/sort_date_asc" />
                 <item
-                    android:id="@+id/action_date_des"
+                    android:id="@+id/action_date_desc"
                     android:title="@string/sort_date_des" />
             </group>
         </menu>

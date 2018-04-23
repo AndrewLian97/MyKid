@@ -25,6 +25,8 @@ public class ListViewFragment extends ListFragment {
         public void onItemSelected(KidActivity kidActivity);
     }
 
+    public int order = UserSQL.ALPHA_ASC;
+
     private onMasterSelectedListener myListener = null;
     private ArrayList<KidActivity> array;
     private CustomListAdapter adapter;
@@ -49,7 +51,7 @@ public class ListViewFragment extends ListFragment {
 
         // retrieve list of kidActivity from database
         UserSQL db = new UserSQL(getActivity());
-        array = db.getKidActivityList();
+        array = db.getKidActivityList(order);
 
         // set list adapter
         adapter = new CustomListAdapter(getActivity(), array);
@@ -153,7 +155,7 @@ public class ListViewFragment extends ListFragment {
     public void updateResult() {
         // update arraylist and refresh listview
         UserSQL db = new UserSQL(getActivity());
-        array = db.getKidActivityList();
+        array = db.getKidActivityList(order);
         adapter = new CustomListAdapter(getActivity(), array);
         setListAdapter(adapter);
     }

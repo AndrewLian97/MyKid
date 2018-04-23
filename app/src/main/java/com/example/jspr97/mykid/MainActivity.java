@@ -194,9 +194,26 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            // delete option selected
-            case R.id.action_delete:
-                // DELETE HERE
+            // sort option selected
+            case R.id.action_alpha_asc:
+                listViewFragment.order = UserSQL.ALPHA_ASC;
+                listViewFragment.updateResult();
+                item.setChecked(true);
+                return true;
+            case R.id.action_alpha_desc:
+                listViewFragment.order = UserSQL.ALPHA_DESC;
+                listViewFragment.updateResult();
+                item.setChecked(true);
+                return true;
+            case R.id.action_date_asc:
+                listViewFragment.order = UserSQL.DATE_ASC;
+                listViewFragment.updateResult();
+                item.setChecked(true);
+                return true;
+            case R.id.action_date_desc:
+                listViewFragment.order = UserSQL.DATE_DESC;
+                listViewFragment.updateResult();
+                item.setChecked(true);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

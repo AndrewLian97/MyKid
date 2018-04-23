@@ -1,7 +1,6 @@
 package com.example.jspr97.mykid;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +16,7 @@ public class ListDetailFragment extends android.support.v4.app.Fragment {
         super.onActivityCreated(savedInstanceState);
 
         // Inflate the layout for this fragment
-        rootView = inflater.inflate(R.layout.activity_details, container, false);
+        rootView = inflater.inflate(R.layout.fragment_details, container, false);
 
         // set references
         myText = rootView.findViewById(R.id.activitynameID);

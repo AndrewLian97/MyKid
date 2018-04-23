@@ -114,7 +114,7 @@
             android:layout_width="165dp"
             android:layout_height="25dp"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="28dp"
+            android:layout_marginTop="38dp"
             android:text="@string/reporter_name"
             app:layout_constraintStart_toEndOf="@+id/ic_nameofreporter"
             app:layout_constraintTop_toBottomOf="@+id/timeID" />
@@ -134,7 +134,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="28dp"
+            android:layout_marginTop="38dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/dateID"
             app:srcCompat="@drawable/ic_name_of_reporter" />
