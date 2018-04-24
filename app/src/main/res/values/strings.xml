@@ -19,4 +19,5 @@
     <string name="sort_date_des">Date (newest)</string>
     <string name="details_tab">Details</string>
     <string name="images_tab">Images</string>
+    <string name="image_empty">No image available</string>
 </resources>

@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -51,6 +50,7 @@ public class UserSQL {
         values.put(KidActivity.KEY_DATE, inputDateFormat(kidActivity.getDate()));
         values.put(KidActivity.KEY_TIME, kidActivity.getTime());
         values.put(KidActivity.KEY_REPORTER, kidActivity.getReporter());
+
         db.update(KidActivity.TABLE_NAME, values, KidActivity.KEY_ID + "= ?",
                 new String[] {String.valueOf(kidActivity.getId())});
         db.close();     // close connection

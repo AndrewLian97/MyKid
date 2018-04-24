@@ -235,7 +235,7 @@ public class InputActivity extends AppCompatActivity {
                                     locationString,
                                     dateString,
                                     timeString,
-                                    reporterString);
+                                    reporterString,"");
                             if (callingActivity.equals(MainActivity.class.getName()))
                                 addActivity(newActivity);
                             else if (callingActivity.equals(ViewActivity.class.getName()))
