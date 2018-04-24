@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
     private View coordinatorView;
     private boolean landscape;
     private ListViewFragment listViewFragment;
+    private int currentActivityId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,15 +83,16 @@ public class MainActivity extends AppCompatActivity {
     public void sendActivity (KidActivity kidActivity){
         ListDetailFragment listDetailFragment;
 
+        currentActivityId = kidActivity.getId();
         Bundle bundle = new Bundle();
-        bundle.putInt(KidActivity.KEY_ID, kidActivity.getId());
+        bundle.putInt(KidActivity.KEY_ID, currentActivityId);
 
         // if landscape mode, show beside
         if (landscape) {
             listDetailFragment = (ListDetailFragment) getSupportFragmentManager().findFragmentById(R.id.frameLayoutDetail);
             listDetailFragment.showDetails(bundle);
             findViewById(R.id.frameLayoutDetail).setVisibility(View.VISIBLE);
-
+            findViewById(R.id.floatingActionButton2).setVisibility(View.VISIBLE);
         } else {
             // if portrait, display details in ViewActivity
             Intent intent = new Intent(this, ViewActivity.class);
@@ -103,6 +105,15 @@ public class MainActivity extends AppCompatActivity {
         // go to input screen
         Intent intent = new Intent(this,InputActivity.class);
         startActivityForResult(intent, REQUEST_CODE_NEW);
+    }
+
+    public void onClickNext(View view) {
+        Bundle bundle = new Bundle();
+        bundle.putInt(KidActivity.KEY_ID, currentActivityId);
+
+        Intent intent = new Intent(this, ViewActivity.class);
+        intent.putExtras(bundle);
+        startActivityForResult(intent, REQUEST_CODE_VIEW);
     }
 
     @Override

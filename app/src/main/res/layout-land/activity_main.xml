@@ -51,5 +51,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@android:drawable/ic_input_add" />
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/floatingActionButton2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="90dp"
+        android:layout_marginRight="16dp"
+        android:clickable="true"
+        android:onClick="onClickNext"
+        android:scaleType="fitCenter"
+        android:visibility="gone"
+        app:fabSize="normal"
+        app:layout_anchor="@id/linearLayout"
+        app:layout_anchorGravity="bottom|right|end"
+        app:srcCompat="@drawable/ic_arrow_forward_white_24dp" />
+
 
 </android.support.design.widget.CoordinatorLayout>

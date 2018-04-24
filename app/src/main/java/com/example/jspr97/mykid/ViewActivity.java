@@ -2,25 +2,38 @@ package com.example.jspr97.mykid;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.design.widget.TabLayout;
+import android.support.v4.content.FileProvider;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
+
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class ViewActivity extends AppCompatActivity {
 
     private static final int REQUEST_CODE = 1;
+    private static final int REQUEST_IMAGE_CAPTURE = 2;
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private CustomPagerAdapter adapter;
     private int activity_id;
     private boolean updated = false;
+    private ListDetailFragment detailFragment;
+    private GalleryFragment galleryFragment;
+    private File imageFile = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,11 +53,14 @@ public class ViewActivity extends AppCompatActivity {
         adapter = new CustomPagerAdapter(getSupportFragmentManager());
 
         // show activity details in fragment
-        ListDetailFragment detailFragment = new ListDetailFragment();
+        detailFragment = new ListDetailFragment();
         detailFragment.setArguments(getIntent().getExtras());
 
+        galleryFragment = new GalleryFragment();
+        galleryFragment.setArguments(getIntent().getExtras());
+
         adapter.addFragment(detailFragment, "details");
-        adapter.addFragment(new ListDetailFragment(), "media");
+        adapter.addFragment(galleryFragment, "media");
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
     }
@@ -62,12 +78,18 @@ public class ViewActivity extends AppCompatActivity {
             case android.R.id.home:
                 onBackPressed();
                 return true;
+            case R.id.action_add_image:
+                // add images to activity
+                takePhoto();
+                return true;
             case R.id.action_edit:
+                // go to edit screen
                 Intent intent = new Intent(this, InputActivity.class);
                 intent.putExtra(KidActivity.KEY_ID, activity_id);
                 startActivityForResult(intent, REQUEST_CODE);
                 return true;
             case R.id.action_delete:
+                // delete current kid activity
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle("Confirm Delete")
                         .setMessage("Are you sure you want to delete?")
@@ -103,6 +125,14 @@ public class ViewActivity extends AppCompatActivity {
                 ListDetailFragment detailFragment = (ListDetailFragment) adapter.getItem(0);
                 detailFragment.showDetails(bundle);
             }
+        } else if (requestCode == REQUEST_IMAGE_CAPTURE) {
+            if (resultCode == RESULT_OK) {
+                UserSQL db = new UserSQL(this);
+                KidActivity kidActivity = db.getKidActivity(activity_id);
+                kidActivity.setImagePath(imageFile.getAbsolutePath());
+                db.update(kidActivity);
+                galleryFragment.update();
+            }
         }
     }
 
@@ -119,5 +149,36 @@ public class ViewActivity extends AppCompatActivity {
         if (updated)
             setResult(RESULT_CANCELED);
         finish();
+    }
+
+    private void takePhoto() {
+        // access camera
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            imageFile = null;
+            try {
+                imageFile = createImageFile();
+            } catch (IOException ex) {
+                Log.i("FILE", "Error creating file");
+            }
+            // if the file is successfully created
+            if (imageFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(this,
+                        "com.example.android.fileprovider",
+                        imageFile);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
+            }
+        }
+    }
+
+    private File createImageFile() throws IOException {
+        // create unique file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(imageFileName,".jpg", storageDir);
+
+        return image;
     }
 }

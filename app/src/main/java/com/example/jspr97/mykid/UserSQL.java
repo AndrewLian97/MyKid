@@ -29,6 +29,7 @@ public class UserSQL {
         values.put(KidActivity.KEY_DATE, inputDateFormat(kidActivity.getDate()));
         values.put(KidActivity.KEY_TIME, kidActivity.getTime());
         values.put(KidActivity.KEY_REPORTER, kidActivity.getReporter());
+        values.put(KidActivity.KEY_IMAGE, kidActivity.getImagePath());
 
         long activity_id = db.insert(KidActivity.TABLE_NAME, null, values);
         db.close();         // close connection
@@ -50,6 +51,7 @@ public class UserSQL {
         values.put(KidActivity.KEY_DATE, inputDateFormat(kidActivity.getDate()));
         values.put(KidActivity.KEY_TIME, kidActivity.getTime());
         values.put(KidActivity.KEY_REPORTER, kidActivity.getReporter());
+        values.put(KidActivity.KEY_IMAGE, kidActivity.getImagePath());
 
         db.update(KidActivity.TABLE_NAME, values, KidActivity.KEY_ID + "= ?",
                 new String[] {String.valueOf(kidActivity.getId())});
@@ -64,7 +66,8 @@ public class UserSQL {
                 KidActivity.KEY_LOCATION + ", " +
                 KidActivity.KEY_DATE + ", " +
                 KidActivity.KEY_TIME + ", " +
-                KidActivity.KEY_REPORTER +
+                KidActivity.KEY_REPORTER + ", " +
+                KidActivity.KEY_IMAGE +
                 " FROM " + KidActivity.TABLE_NAME;
         if (order == ALPHA_ASC) {
             // retrieve all rows alphabetically
@@ -95,6 +98,7 @@ public class UserSQL {
                 kidActivity.setDate(outputDateFormat(cursor.getString(cursor.getColumnIndex(KidActivity.KEY_DATE))));
                 kidActivity.setTime(cursor.getString(cursor.getColumnIndex(KidActivity.KEY_TIME)));
                 kidActivity.setReporter(cursor.getString(cursor.getColumnIndex(KidActivity.KEY_REPORTER)));
+                kidActivity.setImagePath(cursor.getString(cursor.getColumnIndex(KidActivity.KEY_IMAGE)));
                 kidActivityList.add(kidActivity);
             } while (cursor.moveToNext());
         }
@@ -114,7 +118,8 @@ public class UserSQL {
                 KidActivity.KEY_LOCATION + ", " +
                 KidActivity.KEY_DATE + ", " +
                 KidActivity.KEY_TIME + ", " +
-                KidActivity.KEY_REPORTER +
+                KidActivity.KEY_REPORTER + ", " +
+                KidActivity.KEY_IMAGE +
                 " FROM " + KidActivity.TABLE_NAME +
                 " WHERE " + KidActivity.KEY_ID + "= ?";
 
@@ -130,6 +135,7 @@ public class UserSQL {
                 kidActivity.setDate(outputDateFormat(cursor.getString(cursor.getColumnIndex(KidActivity.KEY_DATE))));
                 kidActivity.setTime(cursor.getString(cursor.getColumnIndex(KidActivity.KEY_TIME)));
                 kidActivity.setReporter(cursor.getString(cursor.getColumnIndex(KidActivity.KEY_REPORTER)));
+                kidActivity.setImagePath(cursor.getString(cursor.getColumnIndex(KidActivity.KEY_IMAGE)));
             } while (cursor.moveToNext());
         }
 

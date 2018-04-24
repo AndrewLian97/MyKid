@@ -9,6 +9,7 @@ public class KidActivity {
     public static final String KEY_DATE = "date";
     public static final String KEY_TIME = "time";
     public static final String KEY_REPORTER = "reporter";
+    public static final String KEY_IMAGE = "image";
 
     private int id;
     private String name;
@@ -16,15 +17,17 @@ public class KidActivity {
     private String date;
     private String time;
     private String reporter;
+    private String imagePath;
 
     public KidActivity() {}
 
-    public KidActivity(String name, String location, String date, String time, String reporter) {
+    public KidActivity(String name, String location, String date, String time, String reporter, String imagePath) {
         this.name = name;
         this.location = location;
         this.date = date;
         this.time = time;
         this.reporter = reporter;
+        this.imagePath = imagePath;
     }
 
     public int getId() { return id; }
@@ -39,6 +42,8 @@ public class KidActivity {
 
     public String getReporter() { return reporter; }
 
+    public String getImagePath() { return imagePath; }
+
     public void setId(int id) { this.id = id; }
 
     public void setName(String name) { this.name = name; }
@@ -50,4 +55,6 @@ public class KidActivity {
     public void setTime(String time) { this.time = time; }
 
     public void setReporter(String reporter) { this.reporter = reporter; }
+
+    public void setImagePath(String imagePath) {this.imagePath = imagePath; }
 }
